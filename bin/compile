@@ -26,6 +26,7 @@ APT_PACKAGES=(
 # =============================================================================
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 
 VENDOR_DIR="$BUILD_DIR/vendor/libreoffice"
 APT_DIR="$BUILD_DIR/.apt"
@@ -43,6 +44,8 @@ if [ -d "$LO_CACHE_DIR/extracted" ]; then
 else
   echo "-----> Downloading LibreOffice ${LIBREOFFICE_VERSION}"
   ARCHIVE_PATH="$LO_CACHE_DIR/libreoffice.tar.gz"
+  if [ -f "$ENV_DIR/AWS_ACCESS_KEY_ID" ]; then AWS_ACCESS_KEY_ID=$(<"$ENV_DIR/AWS_ACCESS_KEY_ID"); fi
+  if [ -f "$ENV_DIR/AWS_SECRET_ACCESS_KEY" ]; then AWS_SECRET_ACCESS_KEY=$(<"$ENV_DIR/AWS_SECRET_ACCESS_KEY"); fi
   : "${AWS_ACCESS_KEY_ID:?AWS_ACCESS_KEY_ID is required}"
   : "${AWS_SECRET_ACCESS_KEY:?AWS_SECRET_ACCESS_KEY is required}"
   curl --fail --silent --show-error --retry 3 --connect-timeout 30 \
